@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/register-style.css' %}">
+    <title>TRAVILER</title>
+</head>
+<body>
+    <header>
+        <div id="menu-bar" class="fas fa-bars" onclick="showmenu()"></div>
+        <a href="" class="logo"><span>T</span>raviler</a>
+        <nav class="navbar">
+            <a href="#home">home</a>
+            <a href="#book">book</a>
+            <a href="#packages">packages</a>
+            <a href="#services">services</a>
+            <a href="#gallary">gallary</a>
+            <a href="#review">review</a>
+            <a href="#contact">contact</a>
+        </nav>
+        <div class="icon">
+        </div>
+        <form action="" class="search-form">
+            <input type="search" id="search-bar" placeholder="What you looking for...">
+            <label for="search-bar" class="fas fa-search"></label>
+        </form>
+    </header>
+
+    <div class="login-form">
+        <i class="fas fa-times" id="form-close" onclick="hideform()"></i>
+        {% if page == 'login' %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <h3>login</h3>
+                <label for="username">Email:</label>
+                <input type="text" class="box" name="username" placeholder="Enter your username">
+                <label for="password">Password:</label>
+                <input type="password" class="box" name="password" placeholder="Enter your password">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }} error-message" style="color: red; font-size: 1rem;"{% endif %} >{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <input type="submit" value="login now" class="btn">
+                <p>don't have acount? <a href="{% url 'register' %}">sign up</a></p>
+            </form>
+        {% else %}
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in field.errors %}
+                                    <p class="error-message" style="color: red; font-size: 1.5rem;">{{ error|escape }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <input type="submit" value="login now" class="btn">
+                <p>have acount? <a href="{% url 'login' %}">Log in</a></p>
+            </form>
+        {% endif %}
+    </div>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script src="{% static 'js/travel.js' %}"></script>
+</body>
+</html>

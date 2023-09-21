@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../media/images/Transport-Airplane-Mode-On-icon.ico">
+    <script src="{% static 'js/Jquery.js' %}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>TRAVILER-BOOKING</title>
+</head>
+<body>
+    <header>
+        {% if request.user.is_authenticated %}
+            <div id="menu-bar" class="fas fa-bars" onclick="showmenu()"></div>
+            <a href="" class="logo"><img src="../../media/images/logo-draw.ai-rgb.svg" alt=""></a>
+            <!-- <nav class="navbar">
+                <a href="#home">home</a>
+                <a href="#book">book</a>
+                <a href="#packages">packages</a>
+                <a href="#services">services</a>
+                <a href="#gallary">gallary</a>
+                <a href="#review">review</a>
+                <a href="#contact">contact</a>
+            </nav> -->
+            <div class="icon">
+                <a href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+            </div>
+        {% else %}
+            <div id="menu-bar" class="fas fa-bars" onclick="showmenu()"></div>
+            <a href="" class="logo"><img src="../../media/images/logo-draw.ai-rgb.svg" alt=""></a>
+            <!-- <nav class="navbar">
+                <a href="#home">home</a>
+                <a href="#book">book</a>
+                <a href="#packages">packages</a>
+                <a href="#services">services</a>
+                <a href="#gallary">gallary</a>
+                <a href="#review">review</a>
+                <a href="#contact">contact</a>
+            </nav> -->
+            <div class="icon">
+                <i class="fas fa-search" onclick="showbar()" id="search-btn"></i>
+                <a href="{% url 'login' %}"><i class="fas fa-user"></i></a>
+            </div>
+            <form action="" class="search-form">
+                <input type="search" id="search-bar" placeholder="What you looking for...">
+                <label for="search-bar" class="fas fa-search"></label>
+            </form>
+        {% endif %}
+    </header>
+
+    <!-------------------------------------------------------------------------------->
+    <!-------------------------------------------------------------------------------->
+
+    <section class="book" id="book" style="margin-top: 75px;">
+        <h1 class="heading">
+            <span>b</span>
+            <span>o</span>
+            <span>o</span>
+            <span>k</span>
+            &nbsp;
+            &nbsp;
+            <span>n</span>
+            <span>o</span>
+            <span>w</span>
+        </h1>
+
+        <div class="row">
+            <div class="image">
+                <img src="../../media/images/book-img.svg" alt="">
+            </div>
+            <form method="POST" action="">
+                <p style="color: #666; text-align: center; font-weight: 900; font-size: 1rem;">Welcome: {{request.user.email}}</p>
+                <p style="color: #666; text-align: center; font-weight: 900; font-size: 1rem;">Package Name: {{packagename}}</p>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="inputdiv">
+                    <h3>{{field.label}}</label>
+                    {{field}}
+                </div>
+                {% endfor %}
+                {% if message %}
+                    <p class="error-message">{{ message }}</p>
+                {% endif %}
+                <input type="submit" class="btn" value="book now">
+            </form>
+        </div>
+    </section>
+
+    <script>
+        let link = document.querySelector('.logo');
+        $(link).attr('href', '{% url "home" %}')
+        console.log('done add')
+    </script>
+</body>
+</html>

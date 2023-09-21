@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Django + Stripe Checkout</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <header>
+      <div id="menu-bar" class="fas fa-bars" onclick="showmenu()"></div>
+            <a href="{% url 'home' %}" class="logo"><img src="../../media/images/logo-draw.ai-rgb.svg" alt=""></a>
+            <nav class="navbar">
+                <a href="#home">home</a>
+                <a href="#packages">packages</a>
+                <a href="#services">services</a>
+                <a href="#gallary">gallary</a>
+                <a href="#contact">contact</a>
+            </nav>
+            <div class="icon">
+                <a href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+            </div>
+    </header>
+    <section class="home" >
+    <div class="container">
+      <button class="button is-primary btn" id="submitBtn">Purchase!</button>
+    </div>
+  </section>
+  <script>
+    console.log("Sanity check!");
+
+// Get Stripe publishable key
+    fetch("/config/")
+    .then((result) => { return result.json(); })
+    .then((data) => {
+      // Initialize Stripe.js
+      const stripe = Stripe(data.publicKey);
+
+      // new
+      // Event handler
+      document.querySelector("#submitBtn").addEventListener("click", () => {
+        // Get location and hotel data
+        const location = "{{ location }}";  // Replace with the actual location value
+        const hotel = "{{ hotel }}";  // Replace with the actual hotel value
+
+        // Get Checkout Session ID
+        fetch(`/create-checkout-session/${location}/${hotel}/`)
+        .then((result) => { return result.json(); })
+        .then((data) => {
+          console.log(data);
+          // Redirect to Stripe Checkout
+          return stripe.redirectToCheckout({sessionId: data.sessionId})
+        })
+        .then((res) => {
+          console.log(res);
+        });
+      });
+    });
+  </script>
+  </body>
+</html>
